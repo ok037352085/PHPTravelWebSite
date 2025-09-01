@@ -7,6 +7,11 @@
     const goToDetail = (id) => {
         router.push(`/attraction/${id}`)
     }
+
+    const getImgUrl = (filename) => {
+        return new URL(`./assets/images/cardsImg/${filename}`,import.meta.url).href
+    }
+
 </script>
 
 <template>
@@ -22,7 +27,7 @@
                 :key="item.id"
                 @click="goToDetail(item.id)"
             >
-            <img :src="item.image" :alt="item.name">
+            <img :src="getImgUrl(item.image)" :alt="item.name">
             <h2>{{ item.name }}</h2>
             </div>
         </div>

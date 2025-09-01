@@ -1,9 +1,15 @@
 <script setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import attractions from './data/attractions.json'
 
 const route = useRoute()
 const spot = attractions.find(item => item.id === Number(route.params.id))
+
+const selectedImage = computed(() => {
+  if (!spot) return ''
+  return new URL(`./assets/images/cardsImg/${spot.image}`, import.meta.url).href
+})
 
 const previous = () => {
     window.history.back();
@@ -20,7 +26,7 @@ const previous = () => {
     </div>
     <h1>{{ spot.name }}</h1>
     <div class="img">
-        <img :src="spot.image" :alt="spot.name" />
+        <img :src="selectedImage" :alt="spot.name" />
     </div>
     <div class="attraction-content">
         <h2>地點：</h2>

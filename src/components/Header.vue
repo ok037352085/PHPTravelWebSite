@@ -25,7 +25,7 @@ const logout = () => {
 <template>
   <header>
     <div class="header-left">
-      <img src="../../images/smileface.png" alt="#" class="logo">
+      <img src="../assets/images/smileface.png" alt="#" class="logo">
     </div>
 
     <!-- 桌機版選單（永遠顯示） -->

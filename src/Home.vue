@@ -65,9 +65,6 @@
             });
         }
     };
-    // setTimeout(() => {
-    //     isTransitioning.value = true;
-    // }, 20);
 
     const play = () => {
         if(intervalId)clearInterval(intervalId);

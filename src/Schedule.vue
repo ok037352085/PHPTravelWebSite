@@ -7,9 +7,15 @@
     const showModal = ref(false)
     const tripName = ref("")
 
+
     //取得目前選中的景點
     const selectedSpot = computed(() => {
         return attractions.find(item => item.id === Number(selectedId.value))
+    })
+
+    const selectedImg = computed(() => {
+        if(!selectedSpot.value) return ''
+        return new URL(`../assets/images/cardsImg/${selectedSpot.value.image}`,import.meta.url).href
     })
 
     //加入行程
@@ -93,7 +99,7 @@
             </select>
             <div class="left-container" v-if="selectedSpot">
                 <div class="image-wrapper">
-                    <img :src="selectedSpot.image" :alt="selectedSpot.name" style="max-width: 100%;" />
+                    <img :src="selectedImg" :alt="selectedSpot.name" style="max-width: 100%;" />
                 </div>
                 <button @click="addSpot">加入行程</button>
             </div>

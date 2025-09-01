@@ -1,26 +1,28 @@
 <script setup>
     import { ref, onMounted, onUnmounted } from 'vue';
+    import beach01 from './assets/images/beach01.jpg'
+    import beach02 from './assets/images/beach02.jpg'
+    import beach03 from './assets/images/beach03.jpg'
+    import beach04 from './assets/images/beach04.jpg'
+    import grass01 from './assets/images/grass01.jpg'
+    import grass02 from './assets/images/grass02.jpg'
+    import grass03 from './assets/images/grass03.jpg'
+    import grass04 from './assets/images/grass04.jpg'
+    import oldtown01 from './assets/images/oldtown01.jpg'
+    import oldtown02 from './assets/images/oldtown02.jpg'
+    import oldtown03 from './assets/images/oldtown03.jpg'
+    import oldtown04 from './assets/images/oldtown04.jpg'
+    import treebeach01 from './assets/images/treebeach01.jpg'
+    import treebeach02 from './assets/images/treebeach02.jpg'
+    import treebeach03 from './assets/images/treebeach03.jpg'
+    import treebeach04 from './assets/images/treebeach04.jpg'
+
 
     const images = [
-        "../images/beach01.jpg",
-        "../images/beach02.jpg",
-        "../images/beach03.jpg",
-        "../images/beach04.jpg",
-        "../images/grass01.jpg",
-        "../images/grass02.jpg",
-        "../images/grass03.jpg",
-        "../images/grass04.jpg",
-        "../images/oldtown01.jpg",
-        "../images/oldtown02.jpg",
-        "../images/oldtown03.jpg",
-        "../images/oldtown04.jpg",
-        "../images/treebeach01.jpg",
-        "../images/treebeach02.jpg",
-        "../images/treebeach03.jpg",
-        "../images/treebeach04.jpg",
-        // "../images/num1.jpg",
-        // "../images/num2.jpg",
-        // "../images/num3.jpg",
+        beach01, beach02, beach03, beach04,
+        grass01, grass02, grass03, grass04,
+        oldtown01, oldtown02, oldtown03, oldtown04,
+        treebeach01, treebeach02,treebeach03,treebeach04
     ];
 
     const currentIndex = ref(1);

@@ -4,7 +4,7 @@
 
 <template>
     <footer>
-        <div class="container">
+        <div class="footer-container">
             <div class="footer-top">
                 <div class="follow">
                     <div>
@@ -42,7 +42,7 @@
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
-.container{
+.footer-container{
     background: black;
     width: 100%;
     height: 400px;
@@ -52,7 +52,7 @@
     color: #999;
 }
 
-.container .footer-top {
+.footer-container .footer-top {
     width: 400px;
     height: 45%;
     display: flex;
@@ -84,12 +84,12 @@
     color: #999;
 }
 
-.container .footer-middle {
+.footer-middle {
     width: 400px;
     height: 45%;
 }
 
-.container .footer-middle ul {
+.footer-middle ul {
     width: 100%;
     height: 100%;
     list-style: none;
@@ -100,24 +100,24 @@
     font-family: "Roboto", sans-serif;
 }
 
-.container .footer-middle ul li {
+.footer-middle ul li {
     cursor: pointer;
 }
 
-.container .footer-middle ul span {
+.footer-middle ul span {
     background: #999;
     width: 2px;
     height: 18px;
 }
 
-.container .footer-bottom {
+.footer-bottom {
     width: 400px;
     height: 10%;
     display: flex;
     justify-content: center;
 }
 
-.container .footer-bottom p{
+.footer-bottom p{
     height: 5%;
     bottom: 0;
 }

@@ -87,7 +87,7 @@
 
 <template>
     <div class="head"></div>
-    <div class="schedule-container">
+    <div class="container">
         <!-- 左邊：選擇景點 -->
         <div class="left-panel">
             <h2>自訂遊覽順序</h2>
@@ -131,8 +131,9 @@
     height: 70px;
 }
 
-.schedule-container {
+.container {
     display: flex;
+    justify-content: center;
     gap: 20px;
     padding: 20px
 }
@@ -212,34 +213,32 @@ select,::picker(select) {
 .right-panel {
     position: relative;
     flex: 3;
-    background: transparent;
     padding: 20px;
     border-radius: 20px;
     height: 600px;
 }
 
 .right-panel h2 {
-    display: flex;
-    justify-content: center;
-    
+    margin: 0 auto;
+    width: max-content;
 }
 
 .right-panel .placeholder {
     display: flex;
     justify-content: center;
-    height: 90%;
     align-items: center;
+    margin: 0 auto;
+    width: 60%;
     font-size: 24px;
     color: #555;
 }
 
 .spot-item {
     padding: 10px;
-}
-
-.spot-item {
+    width: 70%;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .spot-item button {
     position: relative;
@@ -337,11 +336,14 @@ select,::picker(select) {
 }
 
 @media (max-width: 1199px) {
-
+        .container{
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 767px) {
-    .schedule-container{
+    .container{
         display: flex;
         flex-direction: column;
     }

@@ -15,7 +15,7 @@
 
     const selectedImg = computed(() => {
         if(!selectedSpot.value) return ''
-        return new URL(`../assets/images/cardsImg/${selectedSpot.value.image}`,import.meta.url).href
+        return new URL(`./assets/images/cardsImg/${selectedSpot.value.image}`, import.meta.url).href
     })
 
     //加入行程

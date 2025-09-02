@@ -8,7 +8,7 @@ const spot = attractions.find(item => item.id === Number(route.params.id))
 
 const selectedImage = computed(() => {
   if (!spot) return ''
-  return new URL(`/public/images/cardImg/${spot.image}`, import.meta.url).href
+  return new URL(`./assets/images/cardsImg/${spot.image}`, import.meta.url).href
 })
 
 const previous = () => {

@@ -1,44 +1,68 @@
 <script setup>
-    import { ref } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { auth, db } from './data/firebase'
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore'
+import { FirebaseError } from 'firebase/app';
 
-    const userId = ref("");
-    const username = ref("");
-    const password = ref("");
-    const email = ref("");
-    const message = ref("");
+const nickname = ref("");
+const username = ref("");
+const password = ref("");
+const email = ref("");
+const message = ref("");
+const router = useRouter();
 
-    const register = async() => {
-        if(!userId.value || !username.value || !password.value || !email.value) {
-            message.value = "資料不可空白";
-            return
-        }
+const register = async() => {
+    if(!nickname.value || !username.value || !password.value || !email.value) {
+        message.value = "資料不可空白";
+        return
+    }
 
-        try{
-            const res = await fetch("http://localhost:8888/backend/register.php", {
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    userId: userId.value,
-                    username: username.value,
-                    password: password.value,
-                    email: email.value
-                }),
-            })
+    try {
+        // 使用 Firebase Authentication 註冊
+        const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
+        const firebaseUid = userCredential.user.uid
 
-            const data = await res.json();
-            if(data.status === "success"){
-                message.value = "✅" + data.message;
-                //註冊成功後可以導向燈入頁
-                window.location.href = "/Login";
-            }else{
-                message.value = "❌" + data.message;
+        // 直接寫入 Firestore
+        await setDoc(doc(db, 'users', firebaseUid), {
+            nickname: nickname.value,
+            username: username.value,
+            email: email.value,
+            createdAt: new Date()
+        })
+
+        console.log("firebase寫入成功")
+
+        // 存到 localStorage
+        localStorage.setItem('userId', firebaseUid)
+        localStorage.setItem('nickname', nickname.value)
+        localStorage.setItem('username', username.value)
+
+        message.value = '註冊成功'
+        setTimeout(() => router.push('/Login'), 1000)
+
+    } catch(err) {
+        console.error("firebase 註冊錯誤->", err)
+        if(err instanceof FirebaseError){
+            switch(err.code){
+                case "auth/email-already-in-use":
+                    message.value = "此信箱已被註冊"
+                    break
+                case "auth/invalid-email":
+                    message.value = "信箱格式錯誤"
+                    break
+                case "auth/weak-password":
+                    message.value = "密碼至少需要六個字元"
+                    break
+                default:
+                    message.value = "註冊失敗:" + err.message
             }
-        } catch(err){
-            message.value = "伺服器錯誤:" + err;
+        } else {
+            message.value = "系統錯誤"
         }
     }
+}
 </script>
 
 <template>
@@ -47,7 +71,7 @@
         <form @submit.prevent="register">
             <h1>會員註冊</h1>
             <div class="input-box">
-                <input v-model="userId" type="text" name="userId" placeholder="輸入暱稱" required>
+                <input v-model="nickname" type="text" placeholder="輸入暱稱" required>
                 <i class="fa-solid fa-person"></i>
             </div>
             <div class="input-box">
@@ -62,10 +86,10 @@
                 <input v-model="password" type="password" name="password" placeholder="輸入密碼" required>
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <button type="submit" class="btn">註冊</button>
+            <button type="submit" class="register-btn">註冊</button>
             <p>{{ message }}</p>
             <div class="register-link">
-                <p>已經有帳號了? <router-link to="/login">去登入</router-link></p>
+                <p>已經有帳號了? <router-link to="/Login">去登入</router-link></p>
             </div>
         </form>
     </div>
@@ -156,7 +180,7 @@ form {
     text-decoration: underline;
 }
 
-.container .btn {
+.container .register-btn {
     width: 100%;
     height: 45px;
     background: #fff;
@@ -170,8 +194,9 @@ form {
     transition: .2s ease;
 }
 
-.container .btn:hover {
-    box-shadow: 0 0 10px #333;
+.register-btn:hover {
+    background: #555;
+    color: #fff;
 }
 
 .container .register-link {

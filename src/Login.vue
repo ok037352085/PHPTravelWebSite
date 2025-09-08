@@ -1,35 +1,54 @@
 <script setup>
     import { ref } from 'vue'
+    import { useRouter } from 'vue-router'
+    import { db } from './data/firebase'
+    import { getAuth,signInWithEmailAndPassword } from 'firebase/auth'
+    import { doc, getDoc } from 'firebase/firestore'
+    import Toast from './components/Toast.vue'
 
-    const userId = ref("")
-    const username = ref("")
+    const email = ref("")
     const password = ref("")
     const message = ref("")
+    const router = useRouter()
+
 
     const login = async() => {
         try{
-            const res = await fetch("http://localhost:8888/backend/login.php",{
-                method:"POST",
-                headers:{"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    userId: userId.value,
-                    username: username.value,
-                    password: password.value
-                })
-            })
-            const data = await res.json()
-            if(data.status === "success"){
-                message.value = "✅" + data.message
-                localStorage.setItem("username", data.user);
-                localStorage.setItem("userId", data.userId);
-                window.location.href = '/Member';
-            }else{
-                message.value = "❌" + data.message
+            const auth = getAuth()
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email.value,
+                password.value
+            )
+
+            const user = userCredential.user;
+
+            //從firebase抓取使用者資料
+            const userDocRef = doc(db, "users", user.uid)
+            const userDocSnap = await getDoc(userDocRef)
+            if(userDocSnap.exists()){
+                const userData = userDocSnap.data();
+
+                localStorage.setItem('userUid', user.uid);
+                localStorage.setItem('username', userData.username || "")
+                localStorage.setItem('nickname', userData.nickname || "")
+                localStorage.setItem('token', await user.getIdToken())
+
+                window.dispatchEvent(new Event("userChanged"))
+                message.value = "登入成功"
+                setTimeout(() => router.push('/Member'), 1000)
             }
         }catch(err){
-            message.value = "伺服器錯誤：" + err
+            console.error("登入失敗:", err)
+            notify("登入失敗，請確認帳號密碼是否正確")
         }
     }
+
+    const toastRef = ref('')
+    const notify = (msg) => {
+        toastRef.value.showToast(msg)
+    }
+
 </script>
 
 <template>
@@ -38,24 +57,21 @@
         <form @submit.prevent="login">
             <h1>會員登入</h1>
             <div class="input-box">
-                <input v-model="username" type="text" name="username" placeholder="輸入帳號" required>
+                <input v-model="email" type="text" name="email" placeholder="登入信箱" required>
                 <i class="fa-solid fa-user"></i>
             </div>
             <div class="input-box">
                 <input v-model="password" type="password" name="password" placeholder="輸入密碼" required>
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <div class="remember-forgot">
-                <label><input type="checkbox">記住帳號</label>
-                <a href="#">忘記密碼了嗎?</a>
-            </div>
-            <button class="btn" type="submit">登入</button>
+            <button class="login-btn" @click="login">登入</button>
             <p>{{ message }}</p>
             <div class="register-link">
-                <p>還沒註冊嗎? <router-link to="/register">註冊</router-link></p>
+                <p>還沒註冊嗎? <router-link to="/Register">註冊</router-link></p>
             </div>
         </form>
     </div>
+    <Toast  ref="toastRef"/>
 </template>
 
 <style scoped>
@@ -142,7 +158,7 @@ form {
     text-decoration: underline;
 }
 
-.container .btn {
+.container .login-btn {
     width: 100%;
     height: 45px;
     background: #fff;
@@ -156,8 +172,9 @@ form {
     transition: .2s ease;
 }
 
-.container .btn:hover {
-    box-shadow: 0 0 10px #333;
+.login-btn:hover {
+    background: #555;
+    color: #fff;
 }
 
 .container .register-link {

@@ -1,11 +1,20 @@
 <script setup>
     import { ref, computed } from 'vue'
     import attractions from './data/attractions.json'
+    import { useRouter } from 'vue-router'
+    import draggable from 'vuedraggable'
+    import Toast from './components/Toast.vue'
 
     const selectedId = ref("") //下拉式選單的選項
     const itinerary = ref([])  //行程清單(最多三個)
     const showModal = ref(false)
     const tripName = ref("")
+    const router = useRouter()
+
+    const images = import.meta.glob('./assets/images/cardsImg/*', { eager: true, as: 'url' })
+    const imageMap = Object.fromEntries(
+        Object.entries(images).map(([path, url]) => [path.split('/').pop(), url])
+    )
 
 
     //取得目前選中的景點
@@ -14,15 +23,15 @@
     })
 
     const selectedImg = computed(() => {
-        if(!selectedSpot.value) return ''
-        return new URL(`./assets/images/cardsImg/${selectedSpot.value.image}`, import.meta.url).href
+        if (!selectedSpot.value) return ''
+        return imageMap[selectedSpot.value.image] || ''
     })
 
     //加入行程
     const addSpot = () => {
         if(!selectedSpot.value) return
         if(itinerary.value.length >= 3){
-            alert('最多三個')
+            notify('最多三個')
             return
         }
             
@@ -44,13 +53,13 @@
 
     const openSaveModal = () => {
         if(itinerary.value.length < 3){
-            alert("請先安排完整的行程")
+            notify("請先安排完整的行程")
             return
         }
-        const userId = localStorage.getItem("userId")
-        if(!userId) {
-            alert("error")
-            return
+        const username = localStorage.getItem("username")
+        if(!username) {
+            notify("請先登入")
+            router.push('/Login')
         }
         showModal.value = true
     }
@@ -58,19 +67,19 @@
     //儲存到localStorage
     const saveItinerary = () => {
         if(!tripName.value.trim()){
-            alert('輸入行程名稱')
+            notify('輸入行程名稱')
             return
         }
 
-        const userId = localStorage.getItem("userId")
+        const username = localStorage.getItem('username')
         //如果localStorage沒有savedTrips，就給一個空物件
         const allTrips = JSON.parse(localStorage.getItem("savedTrips")) || {}
 
-        if(!allTrips[userId]){
-            allTrips[userId] = []
+        if(!allTrips[username]){
+            allTrips[username] = []
         }
 
-        allTrips[userId].push({
+        allTrips[username].push({
             tripName: tripName.value,
             spots: itinerary.value
         })
@@ -81,8 +90,15 @@
         tripName.value = ""
         itinerary.value = []
         showModal.value = false
-        alert('添加成功')
+        notify('添加成功')
     }
+
+    const toastRef = ref('')
+
+    const notify = (msg) => {
+        toastRef.value.showToast(msg)
+    }
+
 </script>
 
 <template>
@@ -105,15 +121,22 @@
             </div>
         </div>
 
-        <!-- 右邊：行程清單 -->
+        <!-- 右邊：行程清單(拖曳排序) -->
         <div class="right-panel">
         <h2>我的行程</h2>
         <h3 class="placeholder" v-show="itinerary.length === 0">尚無行程</h3>
-        <div class="spot-item" v-for="spot in itinerary" :key="spot.id">
-            <h3>{{ spot.name }}</h3>
-            <button @click="removeSpot(spot.id)">移除</button>
-        </div>
-        <button  class="saveBtn" v-show="canSave" @click="openSaveModal">保存</button>
+        <draggable v-model="itinerary" item-key="id" animation="200">
+            <template #item="{ element }">
+            <div class="spot-card">
+                <img :src="imageMap[element.image]" :alt="element.name" />
+                <div class="spot-info">
+                <h3>{{ element.name }}</h3>
+                <button @click="removeSpot(element.id)"><i class="fa-solid fa-xmark" style="color: #fff;"></i></button>
+                </div>
+            </div>
+            </template>
+        </draggable>
+        <button class="saveBtn" v-show="canSave" @click="openSaveModal">保存</button>
         </div>
         <div class="modal-overlay" v-if="showModal" @click.self="showModal = false">
             <div class="modal">
@@ -123,6 +146,7 @@
             </div>
         </div>
     </div>
+    <Toast  ref="toastRef"/>
 </template>
 
 <style scoped>
@@ -163,9 +187,13 @@
     outline: none;
 }
 
+.left-panel select:hover {
+    background: #000;
+}
+
 select,::picker(select) {
     appearance: base-select;
-    background: #555;
+    background: #000;
     color: #fff;
     outline: none;
     border: none;
@@ -214,8 +242,8 @@ select,::picker(select) {
     position: relative;
     flex: 3;
     padding: 20px;
+    border: 5px solid #555;
     border-radius: 20px;
-    height: 600px;
 }
 
 .right-panel h2 {
@@ -228,44 +256,51 @@ select,::picker(select) {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    width: 60%;
     font-size: 24px;
     color: #555;
 }
 
-.spot-item {
-    padding: 10px;
-    width: 70%;
-    margin: 0 auto;
+/* 卡片樣式 */
+.spot-card {
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    background: #333;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px auto;
+    width: 90%;
+    gap: 15px;
+    transition: transform 0.2s;
 }
-.spot-item button {
-    position: relative;
-    width: max-content;
+.spot-card:hover {
+    transform: scale(1.02);
+}
+.spot-card img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.spot-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+.spot-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+.spot-info button {
     background: none;
-    color: white;
-    font-size: 16px;
     border: none;
-    padding: 5px 5px;
+    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
 }
-
-.spot-item button::after{
-    content: "";
-    background: #000;
-    height: 3px;
-    width: 0%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transition: 0.2s;
-    border-radius: 50px;
-}
-
-.spot-item button:hover::after {
-    width: 100%;
+.spot-info button:hover {
+    transform: scale(1.2);
 }
 
 .saveBtn {
@@ -300,7 +335,7 @@ select,::picker(select) {
 }
 
 .modal {
-    background: #000;
+    background: rgba(0,0,0,0.8);
     padding: 60px 120px 60px 120px;
     border-radius: 20px;
     display: flex;

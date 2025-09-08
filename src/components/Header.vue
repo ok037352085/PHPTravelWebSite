@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -8,17 +8,30 @@ const username = ref("")
 const userId = ref("")
 const isMenuOpen = ref(false) // 預設關閉
 
-onMounted(() => {
+const syncUser = () => {
   username.value = localStorage.getItem("username");
   userId.value = localStorage.getItem("userId");
+}
+
+onMounted(() => {
+  syncUser()
+  window.addEventListener("userChanged", syncUser)
+})
+
+onUnmounted(() => {
+  syncUser()
+  window.removeEventListener("userChanged", syncUser)
 })
 
 const logout = () => {
-  localStorage.removeItem("username");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("token");
-  username.value = "";
-  router.push("/Login");
+  localStorage.removeItem("username")
+  localStorage.removeItem("nickname")
+  localStorage.removeItem("userId")
+  localStorage.removeItem("token")
+
+  window.dispatchEvent(new Event("userChanged"))
+
+  router.push("/Login")
 }
 </script>
 

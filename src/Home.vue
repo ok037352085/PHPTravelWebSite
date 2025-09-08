@@ -17,7 +17,6 @@
     import treebeach03 from './assets/images/treebeach03.jpg'
     import treebeach04 from './assets/images/treebeach04.jpg'
 
-
     const images = [
         beach01, beach02, beach03, beach04,
         grass01, grass02, grass03, grass04,
@@ -141,14 +140,13 @@
                 </ul>
             </div>
         </div>
+        <div>
+            <img :src="imagewheel">
+        </div>
     </div>
 </template>
 
 <style scoped>
-.container {
-    background: #999;
-}
-
 .head {
     width: 100%;
     height: 70px;
@@ -173,7 +171,6 @@
 
 #image-wheel {
     width: 100%;
-    height: 540px;
     top: 70px;
     display: flex;
     justify-content: center;
@@ -182,8 +179,6 @@
 }
 
 .carousel-container {
-    width: 980px;
-    height: 540px;
     position: relative;
     margin: 0 auto;
 }
@@ -243,7 +238,7 @@
   transform: translateY(-50%);
   background: rgba(0,0,0,0.1);
   border: none;
-  border-radius: 40%;
+  border-radius: 50%;
   color: white;
   font-size: 2rem;
   padding: 0.5rem 1rem;
@@ -274,11 +269,7 @@
 
   .carousel-container {
     width: 90%; /* 不再固定 980px，跟隨容器 */
-    height: 400px;
-  }
-
-  #image-wheel {
-    height: 400px;
+    /* height: 400px; */
   }
 
   .info {
@@ -301,10 +292,12 @@
     text-align: center;
   }
 
+  #image-wheel {
+    padding-bottom: 0px;
+  }
+
   .carousel-container {
     width: 100%;
-    height: 100%;
-    /* overflow: hidden; */
   }
 
   .carousel-btn {

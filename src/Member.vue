@@ -1,59 +1,107 @@
 <script setup>
-    import { ref, onMounted } from 'vue'
-
-    const userId = ref("")
+    import { ref, onMounted, computed } from 'vue'
+    import { db } from './data/firebase'
+    import { getAuth } from 'firebase/auth'
+    import { collection, addDoc, Timestamp, onSnapshot, query, orderBy } from 'firebase/firestore'
+    import Toast from './components/Toast.vue'
     const savedItinerary = ref([])
+    const message = ref("")
+    const messages = ref([])
+    const nickname = ref("")
+    const username = ref("")
 
     onMounted(() => {
-        userId.value = localStorage.getItem("userId")
-        if(userId.value){
-            const allTrips = JSON.parse(localStorage.getItem("savedTrips")) || {}
-            savedItinerary.value = allTrips[userId.value] || []
-        }
-    })
+        nickname.value = localStorage.getItem('nickname') || ""
+        username.value = localStorage.getItem('username') || ""
 
-    const cleanItinerary = (index) => {
-        savedItinerary.value.splice(index, 1);
+        if(!nickname.value) return
 
         const allTrips = JSON.parse(localStorage.getItem("savedTrips")) || {}
-        allTrips[userId.value] = savedItinerary.value
-        localStorage.setItem("savedTrips", JSON.stringify(allTrips));
+        savedItinerary.value = allTrips[username.value] || []
+
+        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"))
+        onSnapshot(q, (snapshot) => {
+            messages.value = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))
+        })
+    })
+
+    const cleanItinerary = (index) => { 
+        if(!username.value)return
+
+        if(!confirm("確定要刪除該行程嗎?")){
+            return
+        }
+        
+        savedItinerary.value.splice(index,1)
+        const allTrips = JSON.parse(localStorage.getItem('savedTrips')) || {}
+        allTrips[username.value] = savedItinerary.value
+        localStorage.setItem('savedTrips', JSON.stringify(allTrips))
     }
 
-    const message = ref("");
 
     const sendMessage = async () => {
-    if (!message.value.trim()) {
-        alert("請輸入留言");
-        return;
+        if (!message.value.trim()) {
+            notify("請輸入留言");
+            return;
+        }
+
+        const auth = getAuth()
+        const user = auth.currentUser
+        if(!user){
+            notify("請先登入才能留言")
+            return
+        }
+
+        try {
+            await addDoc(collection(db, 'messages'),{
+                uid: user.uid,
+                nickname: nickname.value || user.displayName || "訪客",
+                username: username.value || user.email,
+                message: message.value,
+                createdAt: Timestamp.now()
+            })
+            notify('留言成功')
+            message.value = ''
+        } catch (err) {
+            notify("留言失敗，請稍後再試");
+            console.error("firebase錯誤:", err);
+        }
     }
 
-    try {
-        const res = await fetch("http://localhost:3000/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message.value }),
-        });
-
-        const data = await res.json();
-        alert(data.msg);
-        message.value = ""; // 清空輸入框
-    } catch (error) {
-        alert("寄送失敗，請稍後再試");
-        console.error(error);
+    const toastRef = ref('')
+    const notify = (msg) => {
+        toastRef.value.showToast(msg)
     }
-    };
+
+    const duration = computed(() => {
+        const len = messages.value ? messages.value.length : 0
+        return Math.min(60, Math.max(12, len * 3))
+    })
 
 </script>
 
 <template>
     <div class="head"></div>
     <div class="container">
-        <h1 >歡迎回來，{{ userId }}</h1>
+        <div class="marquee" v-if="messages.length">
+            <div class="marquee-inner" :style="{ '--duration': duration + 's' }">
+                <div class="marquee-group">
+                    <span v-for="msg in messages" :key="msg.id">
+                        <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
+                    </span>
+                </div>
+                <div class="marquee-group" v-if="messages.length > 1" aria-hidden="true">
+                    <span v-for="msg in messages" :key="'dup-' + msg.id">
+                        <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
+                    </span>
+                </div>
+            </div>
+        </div>
+        <h1 >歡迎回來，{{ nickname || '訪客' }}</h1>
         <div class="member">
             <!-- 收藏景點 -->
             <div class="member-left">
-                <h2>我的收藏景點</h2>
+                <h2>我的行程安排</h2>
                 <div class="trip-container" v-if="savedItinerary.length > 0">
                     <div class="savedItinerary" v-for="(trip, index) in savedItinerary" :key="index">
                         <div class="trip-title">
@@ -61,7 +109,7 @@
                             <button class="delBtn" @click="cleanItinerary(index)"><i class="fa-solid fa-xmark"></i></button>
                             <div class="underline"></div>
                         </div>
-                        <ul>
+                        <ul class="triplist">
                             <li v-for="spot in trip.spots" :key="spot.id">
                                 {{ spot.name }}
                             </li>
@@ -78,6 +126,7 @@
             </div>
         </div>
     </div>
+    <Toast ref="toastRef" />
 </template>
 
 <style scoped>
@@ -90,6 +139,49 @@
     width: 100%;
     margin: 0 auto;
 }
+
+.conatiner .marquee {
+    width: 100%;
+    background: #111;
+    color: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 8px 0;
+    font-size: 16px;
+}
+
+.marquee .marquee-inner {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: marquee-scroll var(--duration, 20s) linear infinite;
+    will-change: transform;
+}
+
+.marquee-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+.marquee-group span {
+    display: inline-block;
+    padding: 0 1rem;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255, 255, 255, 0,06);
+    color: #fff;
+    opacity: 0.95;
+    font-weight: 500;
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-inner:hover {
+    animation-play-state: paused;
+}
+
 .container h1 {
     padding: 30px;
 }
@@ -101,14 +193,12 @@
 }
 
 .member-left, .member-right {
-    /* background: #888; */
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 30px 10px;
-    color: #fff;
-    border-radius: 20px;
+    color: #000;
 }
 
 .member-left {
@@ -117,9 +207,10 @@
 }
 
 .trip-container {
-    display: flex;
+    display: flex;;
     flex-wrap: wrap;
-    gap: 12px;
+    border-radius: 10px;
+    gap: 1rem;
 }
 
 .savedItinerary {
@@ -165,6 +256,12 @@
     border-radius: 20px;
 }
 
+.triplist {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
 .delBtn:hover {
     transform: scale(1.2);
 }
@@ -198,6 +295,15 @@
 }
 
 @media (max-width: 767px) {
+    .marquee {
+        font-size: 14px;
+        padding: 6px 0;
+    }
+
+    .marquee-group span {
+        padding: 0 0.6rem;
+    }
+
     .member {
         flex-direction: column;
         align-items: stretch;

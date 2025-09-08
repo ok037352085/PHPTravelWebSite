@@ -125,7 +125,7 @@
         <div class="right-panel">
         <h2>我的行程</h2>
         <h3 class="placeholder" v-show="itinerary.length === 0">尚無行程</h3>
-        <draggable v-model="itinerary" item-key="id" animation="200">
+        <draggable v-model="itinerary" item-key="id" animation="500">
             <template #item="{ element }">
             <div class="spot-card">
                 <img :src="imageMap[element.image]" :alt="element.name" />
@@ -270,7 +270,7 @@ select,::picker(select) {
     margin: 10px auto;
     width: 90%;
     gap: 15px;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease-in-out;
 }
 .spot-card:hover {
     transform: scale(1.02);

@@ -156,6 +156,8 @@
     white-space: nowrap;
     animation: marquee-scroll var(--duration, 20s) linear infinite;
     will-change: transform;
+    overflow: hidden;
+
 }
 
 .marquee-group {

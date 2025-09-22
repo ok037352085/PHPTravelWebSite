@@ -31,7 +31,7 @@
 
 <template>
 <div class="layout">
-    <Header :class = "{hidden: !showHeader}"></Header>
+    <Header :class = "{hidden: !showHeader}" />
     <main class="content">
         <RouterView />
     </main>

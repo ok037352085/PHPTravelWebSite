@@ -33,7 +33,7 @@
                 </ul>
             </div>
             <div class="footer-bottom">
-                <p>1234567890</p>
+                <p>© 2025 Jim Yeh. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -42,83 +42,103 @@
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
-.footer-container{
-    background: black;
-    width: 100%;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #999;
+.footer-container {
+  background: black;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #999;
+  padding: 20px 10px;
+  box-sizing: border-box;
 }
 
+/* 上方社群 */
 .footer-container .footer-top {
-    width: 400px;
-    height: 45%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .follow {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .follow p {
-    display: block;
-    font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-size: clamp(14px, 2vw, 20px);
 }
 
 .follow .icon {
-    display: flex;
-    justify-content: center;
-    height: 70px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
 }
 
 .follow .icon a {
-    zoom: 250%;
-    margin: 5px;
-    cursor: pointer;
-    color: #999;
+  font-size: 2rem; /* 代替 zoom，更穩定 */
+  cursor: pointer;
+  color: #999;
 }
 
+/* 中間導覽連結 */
 .footer-middle {
-    width: 400px;
-    height: 45%;
+  max-width: 800px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .footer-middle ul {
-    width: 100%;
-    height: 100%;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 20px;
-    font-family: "Roboto", sans-serif;
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap; /* 小螢幕時換行 */
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(12px, 2vw, 18px);
+  font-family: "Roboto", sans-serif;
+  padding: 0;
 }
 
 .footer-middle ul li {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .footer-middle ul span {
-    background: #999;
-    width: 2px;
-    height: 18px;
+  background: #999;
+  width: 2px;
+  height: 18px;
 }
 
+/* 下方文字 */
 .footer-bottom {
-    width: 400px;
-    height: 10%;
-    display: flex;
-    justify-content: center;
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.footer-bottom p{
-    height: 5%;
-    bottom: 0;
+.footer-bottom p {
+  font-size: clamp(12px, 1.5vw, 16px);
+  margin: 0;
+}
+
+/* ============= RWD ============= */
+@media (max-width: 600px) {
+  .footer-middle ul {
+    flex-direction: column; /* 手機改成直式 */
+    gap: 8px;
+  }
+  .footer-middle ul span {
+    display: none; /* 手機不顯示分隔線 */
+  }
 }
 </style>

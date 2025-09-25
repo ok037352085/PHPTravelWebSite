@@ -97,121 +97,132 @@ const register = async() => {
 
 <style scoped>
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 .head {
-    width: 100%;
-    height: 70px;
+  width: 100%;
+  height: 70px;
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px);
+  padding: 20px;
 }
 
+/* form 外觀一致 */
 form {
-    background: #000;
-    width: 420px;
-    color: white;
-    border: 2px solid #333;
-    border-radius: 20px;
-    padding: 30px 40px;
+  background: #000;
+  width: 100%;
+  max-width: 420px;
+  color: white;
+  border: 2px solid #333;
+  border-radius: 20px;
+  padding: 30px;
 }
 
 .container h1 {
-    font-size: 36px;
-    text-align: center;
+  font-size: clamp(20px, 4vw, 28px);
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.container .input-box {
-    position: relative;
-    width: 100%;
-    height: 50px;
-    margin:  30px 0;
+/* 輸入框 */
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 20px 0;
 }
 
 .input-box input {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    border: 2px solid #555;
-    border-radius: 40px;
-    font-size: 16px;
-    color: #fff;
-    padding: 20px 45px 20px 20px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 2px solid #555;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 0 45px 0 20px;
 }
 
 .input-box input::placeholder {
-    color: #fff;
+  color: #aaa;
+  font-size: 14px;
 }
 
 .input-box i {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #aaa;
 }
 
-.container .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
+/* 按鈕 共用樣式 */
+.login-btn,
+.register-btn {
+  width: 100%;
+  height: 45px;
+  background: #fff;
+  border: none;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #555;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: .2s ease;
 }
 
-.remember-forgot label input {
-    accent-color: #fff;
-    margin-right: 3px;
-}
-
-.remember-forgot a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
-}
-
-.container .register-btn {
-    width: 100%;
-    height: 45px;
-    background: #fff;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    /* box-shadow: 0 0 10px #222; */
-    font-size: 16px;
-    color: #555;
-    font-weight: 600;
-    transition: .2s ease;
-}
-
+.login-btn:hover,
 .register-btn:hover {
-    background: #555;
-    color: #fff;
+  background: #555;
+  color: #fff;
 }
 
-.container .register-link {
-    font-size: 14.5px;
-    text-align: center;
-    margin-top: 20px;
+/* 連結 */
+.register-link {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .register-link p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .register-link p a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+/* ============ RWD ============ */
+@media (max-width: 767px) {
+  form {
+    padding: 20px;
+  }
+
+  .input-box {
+    margin: 15px 0;
+    height: 45px;
+  }
+
+  .input-box i {
+    font-size: 16px;
+    right: 12px;
+  }
+
+  .login-btn,
+  .register-btn {
+    height: 40px;
+    font-size: 15px;
+  }
 }
 </style>

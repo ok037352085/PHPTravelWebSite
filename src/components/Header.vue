@@ -113,25 +113,22 @@ header {
 }
 
 .header-left img {
-  margin-left: 10px;
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: auto;
 }
 
 .header-right ul {
   list-style: none;
   display: flex;
   align-items: center;
-  color: #999;
-}
-
-.header-right ul li {
+  gap: 1rem;
   margin: 0 15px;
 }
 
 .link {
-  color: #999;
+  color: #fff;
   text-decoration: none;
+  font-weight: 900;
 }
 
 .header-right ul li:hover {

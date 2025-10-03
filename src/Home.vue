@@ -152,6 +152,10 @@
     height: 70px;
 }
 
+h1 {
+    cursor: default;
+}
+
 .homepage-title {
     right: 100%;
     height: 230px;

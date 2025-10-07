@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+  const now = new Date().getFullYear()
 
 </script>
 
@@ -18,23 +18,8 @@ import { useRouter, useRoute } from 'vue-router'
                     </div>
                 </div>
             </div>
-            <div class="footer-middle">
-                <ul>
-                    <span></span>
-                    <li>Home</li>
-                    <span></span>
-                    <li>News</li>
-                    <span></span>
-                    <li>About</li>
-                    <span></span>
-                    <li>Contact Us</li>
-                    <span></span>
-                    <li>Our Team</li>
-                    <span></span>
-                </ul>
-            </div>
             <div class="footer-bottom">
-                <p>© 2025 Jim Yeh. All rights reserved.</p>
+                <p>Copyright © {{ now }}</p>
             </div>
         </div>
     </footer>
@@ -45,6 +30,7 @@ import { useRouter, useRoute } from 'vue-router'
 
 .footer-container {
   background: black;
+  bottom: 0;
   margin: 0;
   width: 100%;
   display: flex;
@@ -111,6 +97,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 .footer-middle ul li {
   cursor: pointer;
+  color: #fff;
+  text-decoration: none;
 }
 
 .footer-middle ul span {

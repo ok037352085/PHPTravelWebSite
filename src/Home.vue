@@ -97,9 +97,6 @@
         pause();
         document.removeEventListener("visibilitychange", () => {});
     });
-
-    // onActivated(play);
-    // onDeactivated(pause);
 </script>
 
 <template>
@@ -140,20 +137,18 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <img :src="imagewheel">
-        </div>
     </div>
 </template>
 
 <style scoped>
+
+.container {
+    background: skyblue;
+}
+
 .head {
     width: 100%;
     height: 70px;
-}
-
-h1 {
-    cursor: default;
 }
 
 .homepage-title {
@@ -163,6 +158,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: default;
 }
 
 .homepage-title h1 {
@@ -203,12 +199,6 @@ h1 {
     object-fit: cover;
 }
 
-.info {
-    margin-left: 70px;
-    margin-right: 70px;
-    padding: 20px;
-}
-
 .info .info-news {
     display: flex;
     flex-direction: column;
@@ -219,7 +209,7 @@ h1 {
 .info .info-news ul {
     font-family: "Roboto", sans-serif;
     list-style: none;
-        display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -227,7 +217,6 @@ h1 {
 
 .info .info-news ul li {
     margin: 10px;
-
 }
 
 .info .info-news ul li a {
@@ -261,6 +250,13 @@ h1 {
 
 .next {
   right: 10px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height: 100px;
 }
 
 @media (max-width: 1199px) {

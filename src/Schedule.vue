@@ -156,16 +156,18 @@
 }
 
 .container {
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 20px
+    gap: 1rem;
+    background-image: url('./assets/images/background.jpg');
 }
 
 /* 左邊 */
 .left-panel {
     flex: 2;
-    background: #888;
+    background: rgba(0,0,0,0.5);
     padding: 20px;
     border-radius: 20px;
     height: max-content;
@@ -173,6 +175,8 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    color: #fff;
+    margin: 20px;
 }
 
 .left-panel select {
@@ -180,15 +184,9 @@
     font-size: 16px;
     font-weight: 600;
     padding: 10px;
-    background: #555;
-    color: #fff;
     border: none;
     border-radius: 20px;
     outline: none;
-}
-
-.left-panel select:hover {
-    background: #000;
 }
 
 select,::picker(select) {
@@ -199,6 +197,7 @@ select,::picker(select) {
     border: none;
     border-radius: 20px;
     margin-top: 5px;
+    padding: 1rem;
 }
 
 .left-panel .left-container {
@@ -222,28 +221,28 @@ select,::picker(select) {
     display: block;
 }
 .left-panel button {
-    background: #555;
+    background: rgba(0,0,0,0.8);
     width: 100%;
+    padding: 10px;
     font-size: 16px;
     font-weight: 600;
     color: white;
     border: none;
-    margin-top: 15px;
-    padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
 }
 .left-panel button:hover {
-    background: #000;
+    background: rgba(0,0,0,1);
 }
 
 /* 右邊 */
 .right-panel {
-    position: relative;
+    background: rgba(0,0,0,0.5);
     flex: 3;
-    padding: 20px;
-    border: 5px solid #555;
     border-radius: 20px;
+    color: #fff;
+    margin: 20px;
+
 }
 
 .right-panel h2 {
@@ -257,14 +256,14 @@ select,::picker(select) {
     align-items: center;
     margin: 0 auto;
     font-size: 24px;
-    color: #555;
+    color: #999;
 }
 
 /* 卡片樣式 */
 .spot-card {
     display: flex;
     align-items: center;
-    background: #333;
+    background: rgba(0,0,0,0.8);
     border-radius: 15px;
     padding: 10px;
     margin: 10px auto;

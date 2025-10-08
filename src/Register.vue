@@ -113,6 +113,21 @@ const register = async() => {
   align-items: center;
   min-height: calc(100vh - 70px);
   padding: 20px;
+  background: radial-gradient(circle,rgba(0, 0, 0, 1) 0%, rgba(224, 187, 175, 1) 29%, rgba(235, 156, 108, 1) 65%, rgba(10, 10, 10, 1) 100%) center center no-repeat;
+  background-size: cover;
+  animation: bganimation 2s infinite alternate linear;
+}
+
+@keyframes bganimation {
+  0%{
+    background-size: 100% ;
+  }
+  50%{
+    background-size: 140%;
+  }
+  100%{
+    background-size: 180%;
+  }
 }
 
 /* form 外觀一致 */

@@ -51,7 +51,23 @@ const previous = () => {
     justify-content: center;
     align-items: center;
     position: relative;
+    background: linear-gradient(175deg,rgba(235, 215, 120, 1) 9%, rgba(173, 220, 237, 1) 23%, rgba(149, 219, 245, 1) 41%, rgba(108, 182, 235, 1) 73%, rgba(19, 145, 27, 1) 100%);
+    background-size: 200% 200%;
+    animation: bganimation 10s linear alternate infinite;
 }
+
+@keyframes bganimation {
+    0%{
+        background-position: 0% 10%;
+    }
+    50%{
+        background-position: 50% 100%;
+    }
+    100%{
+        background-position: 0% 10%;
+    }
+}
+
 img {
   width: 100%;
   height: 100%;
@@ -89,6 +105,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0 10rem;
 }
 
 .attraction-content p {

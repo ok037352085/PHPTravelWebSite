@@ -45,6 +45,22 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: calc(100vh - 70px);
+    background: linear-gradient(175deg,rgba(240, 213, 125, 1) 6%, rgba(170, 211, 212, 1) 38%, rgba(131, 210, 230, 1) 73%, rgba(71, 150, 21, 1) 100%, rgba(10, 10, 10, 1) 100%) center center no-repeat;
+    background-size: 200% 200%;
+    animation: bganimation 10s infinite alternate linear;
+}
+
+@keyframes bganimation {
+    0%{
+        background-position: 10% 0%;
+    }
+    50%{
+        background-position: 91% 100%;
+    }
+    100%{
+        background-position: 10% 0%;
+    }
 }
 
 .container .title {

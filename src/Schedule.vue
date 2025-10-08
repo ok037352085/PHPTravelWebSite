@@ -161,7 +161,8 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
-    background-image: url('./assets/images/background.jpg');
+    background: url('./assets/images/background.jpg') center center fixed no-repeat;
+    background-size: cover;
 }
 
 /* 左邊 */
@@ -170,13 +171,13 @@
     background: rgba(0,0,0,0.5);
     padding: 20px;
     border-radius: 20px;
-    height: max-content;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     color: #fff;
     margin: 20px;
+    backdrop-filter: blur(5px);
 }
 
 .left-panel select {
@@ -242,7 +243,7 @@ select,::picker(select) {
     border-radius: 20px;
     color: #fff;
     margin: 20px;
-
+    backdrop-filter: blur(5px);
 }
 
 .right-panel h2 {

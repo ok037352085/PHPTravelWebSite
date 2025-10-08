@@ -92,15 +92,34 @@
   align-items: center;
   min-height: calc(100vh - 70px);
   padding: 20px;
+  background: radial-gradient(circle,rgba(0, 0, 0, 1) 0%, rgba(175, 214, 224, 1) 29%, rgba(172, 231, 250, 1) 65%, rgba(10, 10, 10, 1) 100%) center center no-repeat;
+  background-size: cover;
+  animation: bganimation 5s infinite alternate linear;
+}
+
+@keyframes bganimation {
+  0%{
+    background-size: 100% ;
+  }
+  50%{
+    background-size: 150%;
+  }
+  100%{
+    background-size: 200%;
+  }
 }
 
 form {
-  background: #000;
+  background: rgba(0,0,0,0.8);
   width: 100%;
   max-width: 420px;
   color: white;
   border-radius: 20px;
   padding: 30px;
+}
+
+.container:has(form:hover) {
+  animation-play-state: paused;
 }
 
 .container h1 {

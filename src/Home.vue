@@ -24,6 +24,13 @@
         treebeach01, treebeach02,treebeach03,treebeach04
     ];
 
+    const backgroundColors = [
+        'linear-gradient(120deg, #a1c4fd, #c2e9fb)', // 海邊
+        'linear-gradient(120deg, #d4fc79, #96e6a1)', // 草地
+        'linear-gradient(120deg, #fddb92, #d1fdff)', // 老街
+        'linear-gradient(120deg, #f6d365, #fda085)', // 樹灘
+    ];
+
     const currentIndex = ref(1);
     const isTransitioning = ref(true);
     let intervalId = null;
@@ -101,6 +108,9 @@
 
 <template>
     <div class="container">
+        <div class="bg-blur"
+        :style="{backgroundImage:`url(${images[(currentIndex -1 + images.length) % images.length]})`}"
+        ></div>
         <div class="head"></div>
         <div class="homepage-title">
             <h1>XXOO旅遊網站</h1>
@@ -143,7 +153,18 @@
 <style scoped>
 
 .container {
-    background: skyblue;
+    position: relative;
+    min-height: 100vh;
+}
+
+.bg-blur {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px) brightness(0.7);
+    z-index: -1;
+    transition: background-image 1s ease-in-out;
 }
 
 .head {
@@ -162,7 +183,7 @@
 }
 
 .homepage-title h1 {
-    font-size: 52px;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
 .homepage-title p {
@@ -206,7 +227,11 @@
     align-items: center;
 }
 
-.info .info-news ul {
+.info-news h1 {
+    font-size: clamp(1rem, 5vw, 2rem);
+}
+
+.info-news ul {
     font-family: "Roboto", sans-serif;
     list-style: none;
     display: flex;
@@ -215,14 +240,13 @@
     align-items: center;
 }
 
-.info .info-news ul li {
+.info-news ul li {
     margin: 10px;
 }
 
-.info .info-news ul li a {
+.info-news ul li a {
     color: black;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: clamp(0.5rem, 2vw, 1rem);
 }
 
 .carousel-btn {
@@ -260,13 +284,6 @@ footer {
 }
 
 @media (max-width: 1199px) {
-  .homepage-title h1 {
-    font-size: 40px;
-  }
-  .homepage-title p {
-    font-size: 16px;
-  }
-
   .carousel-container {
     width: 90%; /* 不再固定 980px，跟隨容器 */
     /* height: 400px; */
@@ -276,21 +293,9 @@ footer {
     margin-left: 30px;
     margin-right: 30px;
   }
-
-  .info .info-news ul li a {
-    font-size: 16px;
-  }
 }
 
 @media (max-width: 767px) {
-  .homepage-title h1 {
-    font-size: 28px;
-    text-align: center;
-  }
-  .homepage-title p {
-    font-size: 14px;
-    text-align: center;
-  }
 
   #image-wheel {
     padding-bottom: 0px;
@@ -309,10 +314,6 @@ footer {
     margin-left: 10px;
     margin-right: 10px;
     padding: 10px;
-  }
-
-  .info .info-news ul li a {
-    font-size: 14px;
   }
 }
 </style>

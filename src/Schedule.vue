@@ -104,6 +104,7 @@
 <template>
     <div class="head"></div>
     <div class="container">
+        <div class="bg-blur" :style="{backgroundImage: selectedImg ? `url(${selectedImg})` : 'none'}"></div>
         <!-- 左邊：選擇景點 -->
         <div class="left-panel">
             <h2>自訂遊覽順序</h2>
@@ -150,19 +151,30 @@
 </template>
 
 <style scoped>
-.head {
-    width: 100%;
-    height: 70px;
-}
-
 .container {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     gap: 1rem;
-    background: url('./assets/images/background.jpg') center center fixed no-repeat;
+    background: linear-gradient(175deg,rgba(240, 213, 125, 1) 6%, rgba(170, 211, 212, 1) 38%, rgba(131, 210, 230, 1) 73%, rgba(71, 150, 21, 1) 100%, rgba(10, 10, 10, 1) 100%) center center no-repeat;
     background-size: cover;
+    background-position: 50%;
+}
+
+.head {
+    width: 100%;
+    height: 70px;
+}
+
+.bg-blur {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px) brightness(0.7);
+    transform: scale(1.1);
+    transition: background-image 0.8s ease-in-out, filter 0.8s ease-in-out;
 }
 
 /* 左邊 */

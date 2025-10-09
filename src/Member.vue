@@ -83,46 +83,48 @@
 <template>
     <div class="head"></div>
     <div class="container">
-        <div class="marquee" v-if="messages.length">
-            <div class="marquee-inner" :style="{ '--duration': duration + 's' }">
-                <div class="marquee-group">
-                    <span v-for="msg in messages" :key="msg.id">
-                        <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
-                    </span>
-                </div>
-                <div class="marquee-group" v-if="messages.length > 1" aria-hidden="true">
-                    <span v-for="msg in messages" :key="'dup-' + msg.id">
-                        <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
-                    </span>
-                </div>
-            </div>
-        </div>
-        <h1 >歡迎回來，{{ nickname || '訪客' }}</h1>
-        <div class="member">
-            <!-- 收藏景點 -->
-            <div class="member-left">
-                <h2>我的行程安排</h2>
-                <div class="trip-container" v-if="savedItinerary.length > 0">
-                    <div class="savedItinerary" v-for="(trip, index) in savedItinerary" :key="index">
-                        <div class="trip-title">
-                            <h3>{{ trip.tripName }}</h3>
-                            <button class="delBtn" @click="cleanItinerary(index)"><i class="fa-solid fa-xmark"></i></button>
-                            <div class="underline"></div>
-                        </div>
-                        <ul class="triplist">
-                            <li v-for="spot in trip.spots" :key="spot.id">
-                                {{ spot.name }}
-                            </li>
-                        </ul>
+        <div class="bg-blur">
+            <div class="marquee" v-if="messages.length">
+                <div class="marquee-inner" :style="{ '--duration': duration + 's' }">
+                    <div class="marquee-group">
+                        <span v-for="msg in messages" :key="msg.id">
+                            <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
+                        </span>
+                    </div>
+                    <div class="marquee-group" v-if="messages.length > 1" aria-hidden="true">
+                        <span v-for="msg in messages" :key="'dup-' + msg.id">
+                            <strong>{{ msg.nickname || msg.username }}</strong> : {{ msg.message }} &nbsp;&nbsp;|&nbsp;&nbsp;
+                        </span>
                     </div>
                 </div>
-                <p v-else>尚未儲存任何行程</p>
             </div>
-            <!-- 留言板 -->
-            <div class="member-right">
-                <h2>留言板</h2>
-                <textarea v-model="message"></textarea>
-                <button class="saveMsg" @click="sendMessage">發送</button>
+            <h1 >歡迎回來，{{ nickname || '訪客' }}</h1>
+            <div class="member">
+                <!-- 收藏景點 -->
+                <div class="member-left">
+                    <h2>我的行程安排</h2>
+                    <div class="trip-container" v-if="savedItinerary.length > 0">
+                        <div class="savedItinerary" v-for="(trip, index) in savedItinerary" :key="index">
+                            <div class="trip-title">
+                                <h3>{{ trip.tripName }}</h3>
+                                <button class="delBtn" @click="cleanItinerary(index)"><i class="fa-solid fa-xmark"></i></button>
+                                <div class="underline"></div>
+                            </div>
+                            <ul class="triplist">
+                                <li v-for="spot in trip.spots" :key="spot.id">
+                                    {{ spot.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p v-else>尚未儲存任何行程</p>
+                </div>
+                <!-- 留言板 -->
+                <div class="member-right">
+                    <h2>留言板</h2>
+                    <textarea v-model="message"></textarea>
+                    <button class="saveBtn" @click="sendMessage">發送</button>
+                </div>
             </div>
         </div>
     </div>
@@ -136,14 +138,22 @@
 }
 
 .container {
-    width: 100%;
-    margin: 0 auto;
+    text-align: center;
+    background: url('./assets/images/beach01.jpg');
+    background-size: cover;
+    background-position: 50%;
+    height: 100vh;
+}
+
+.bg-blur {
+    height: 100vh;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
 }
 
 .conatiner .marquee {
     width: 100%;
     background: #111;
-    color: #fff;
     overflow: hidden;
     box-sizing: border-box;
     padding: 8px 0;
@@ -185,27 +195,38 @@
 }
 
 .container h1 {
-    padding: 30px;
+    font-size: clamp(24px, 4vw, 32px);
+    padding: 2rem;
 }
 .member {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-}
-
-.member-left, .member-right {
-    padding: 20px;
+    background: rgba(0,0,0,0.5);
+    width: 80%;
+    height: 60vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin: 30px 10px;
-    color: #000;
+    border-radius: 20px;
+    margin: auto;
+    padding: 10px;
+    color: #fff;
 }
 
 .member-left {
-    width: max-content;
-    height: 100%;
+    /* background: red; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+}
+
+.member-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
 }
 
 .trip-container {
@@ -217,7 +238,6 @@
 
 .savedItinerary {
     background: #555;
-    color: #fff;
     padding: 10px 15px;
     border-radius: 10px;
     min-width: 140px;
@@ -234,7 +254,7 @@
 }
 
 .trip-title h3 {
-    font-size: 18px;
+    font-size: clamp(16px, 4vw, 18px);
     font-weight: 600;
     margin: 0;
 }
@@ -274,8 +294,12 @@
     margin: 0;
 }
 
+.member-left h2 {
+    font-size: clamp(20px, 4vw, 28px);
+}
+
 .member-left p {
-    font-size: 24px;
+    font-size: clamp(14px, 5vw, 18px);
 }
 
 .member-left img {
@@ -283,17 +307,35 @@
     border-radius: 20px;
 }
 
+.member-right h2 {
+    font-size: clamp(20px, 4vw, 28px);
+}
+
 .member-right textarea {
-    width: 90%;
-    min-height: 200px;
+    width: 60%;
+    height: 100%;
     resize: vertical;
-    background: #fff;
+    background: #000;
+    color: #fff;
     margin: 10px 40px;
     padding: 20px;
     border: none;
     outline: none;
-    font-size: 18px;
     border-radius: 20px;
+}
+
+.saveBtn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.8);
+    transition: .2s ease;
+    color: #fff;
+    font-weight: bold;
+}
+
+.saveBtn:hover {
+    background: #000;
 }
 
 @media (max-width: 767px) {

@@ -24,13 +24,6 @@
         treebeach01, treebeach02,treebeach03,treebeach04
     ];
 
-    const backgroundColors = [
-        'linear-gradient(120deg, #a1c4fd, #c2e9fb)', // 海邊
-        'linear-gradient(120deg, #d4fc79, #96e6a1)', // 草地
-        'linear-gradient(120deg, #fddb92, #d1fdff)', // 老街
-        'linear-gradient(120deg, #f6d365, #fda085)', // 樹灘
-    ];
-
     const currentIndex = ref(1);
     const isTransitioning = ref(true);
     let intervalId = null;
@@ -191,11 +184,8 @@
 }
 
 #image-wheel {
-    width: 100%;
-    top: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 80vw;
+    margin: 0 auto;
     overflow: hidden;
 }
 
@@ -225,6 +215,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: #fff;
 }
 
 .info-news h1 {
@@ -245,7 +236,7 @@
 }
 
 .info-news ul li a {
-    color: black;
+    color: #fff;
     font-size: clamp(0.5rem, 2vw, 1rem);
 }
 
@@ -284,11 +275,6 @@ footer {
 }
 
 @media (max-width: 1199px) {
-  .carousel-container {
-    width: 90%; /* 不再固定 980px，跟隨容器 */
-    /* height: 400px; */
-  }
-
   .info {
     margin-left: 30px;
     margin-right: 30px;
@@ -298,6 +284,7 @@ footer {
 @media (max-width: 767px) {
 
   #image-wheel {
+    width: 100vw;
     padding-bottom: 0px;
   }
 
